@@ -1,0 +1,6 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Volunteers · KGF Portal</title><link rel="stylesheet" href="shared.css"><link rel="stylesheet" href="volunteers.css"></head>
+<body><div id="nav"></div><main><h1>Volunteers</h1><p class="sub">Register fellows and issue their sign-in credentials.</p>
+<form class="card adm" id="f"><b id="mode" style="grid-column:1/-1" hidden></b><label>Full name<input name="name" required></label><label>Email<input name="email" type="email"></label><label>Phone<input name="phone"></label><label>College or organisation<input name="college"></label><label id="kl" hidden>New access key (blank keeps current)<input name="new_key" autocomplete="off"></label><button id="go">Register fellow</button><button type="button" class="sec" id="cancel" hidden>Cancel</button></form><div id="key" class="card" hidden></div><h2>All volunteers</h2><div id="list"></div>
+</main><script src="shared.js"></script><script src="volunteers.js"></script></body></html>

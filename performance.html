@@ -1,0 +1,6 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Performance Tracking · KGF Portal</title><link rel="stylesheet" href="shared.css"><link rel="stylesheet" href="performance.css"></head>
+<body><div id="nav"></div><main><h1>Performance Tracking</h1><p class="sub">Attendance, completed tasks, scores and feedback.</p>
+<form class="card adm" id="fa"><label>Fellow<select name="volunteer_code" class="who" required></select></label><label>Date<input name="att_date" type="date" required></label><label>Attendance<select name="status"><option>Present</option><option>Absent</option><option>Leave</option></select></label><button>Mark attendance</button></form><form class="card adm" id="fp" style="margin-top:12px"><label>Fellow<select name="volunteer_code" class="who" required></select></label><label>Month<input name="month" type="month" required></label><label>Score (0-100)<input name="score" type="number" min="0" max="100" required></label><label>Feedback<input name="feedback"></label><button>Save review</button></form><h2>Fellow summary</h2><div id="list"></div>
+</main><script src="shared.js"></script><script src="performance.js"></script></body></html>

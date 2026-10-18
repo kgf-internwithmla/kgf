@@ -1,0 +1,2 @@
+.stat{border-left:6px solid var(--blue2)}.stat b{display:block;font-size:34px;line-height:1.1;color:var(--blue)}
+.stat.y{border-left-color:var(--yellow)}.stat.r{border-left-color:var(--red)}.stat.r b{color:var(--red)}

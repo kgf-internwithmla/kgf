@@ -1,0 +1,7 @@
+.cal-bar{display:flex;align-items:center;justify-content:space-between;margin:18px 0 8px}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.cal div{min-height:70px;padding:4px 6px;border:1px solid var(--line);font-size:12px;overflow:hidden}
+.cal .h{min-height:0;background:var(--blue);color:#fff;font-weight:700;text-align:center}
+.cal .t{background:#fff6d6;outline:2px solid var(--yellow);outline-offset:-2px}.cal .e{display:block;background:var(--blue2);color:#fff;border-radius:3px;padding:0 4px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cal .e.Meeting{background:var(--red)}.cal .e.Training{background:#a37400}
+@media(max-width:600px){.cal div{min-height:48px;font-size:10px}}
