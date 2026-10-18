@@ -1,2 +1,18 @@
-.stat{border-left:6px solid var(--blue2)}.stat b{display:block;font-size:34px;line-height:1.1;color:var(--blue)}
-.stat.y{border-left-color:var(--yellow)}.stat.r{border-left-color:var(--red)}.stat.r b{color:var(--red)}
+.hero{position:relative;overflow:hidden;display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap;color:#fff;padding:26px 28px;margin-bottom:20px;border-radius:20px;background:linear-gradient(120deg,var(--blue),var(--blue2))}
+.hero::after{content:"";position:absolute;right:-50px;top:-60px;width:200px;height:200px;border-radius:50%;background:var(--yellow);opacity:.95}
+.hero::before{content:"";position:absolute;right:120px;bottom:-26px;width:70px;height:70px;border-radius:50%;border:9px solid var(--red);opacity:.9}
+.hero>*{position:relative;z-index:1}
+.hero h1{color:#fff;margin:2px 0 6px}.hero p{margin:0;opacity:.92}.hero .eyebrow{font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--yellow);opacity:1}
+.acts{display:flex;gap:10px;flex-wrap:wrap}
+.btn{display:inline-block;text-decoration:none;font-weight:700;padding:10px 16px;border-radius:10px}
+.btn.y{background:var(--yellow);color:var(--blue)}.btn.y:hover{background:#f5b300}
+.btn.w{background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.55)}.btn.w:hover{background:rgba(255,255,255,.25)}
+.stat{display:flex;align-items:center;gap:14px}
+.si{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;background:var(--sky);color:var(--blue2);flex:none}
+.si .ic{width:24px;height:24px}
+.stat.y .si{background:#fff3cf;color:#a06b00}.stat.r .si{background:#fde0e0;color:var(--red)}.stat.g .si{background:#dff5e3;color:#14602b}
+.stat b{display:block;font-size:30px;line-height:1.05;color:var(--ink)}.stat.r b{color:var(--red)}
+.stat span{color:var(--muted);font-size:13px;line-height:1.3;display:block}
+.sh{display:flex;align-items:baseline;justify-content:space-between;gap:10px}.sh a{font-weight:600;font-size:14px;text-decoration:none}
+.foot{margin-top:40px;text-align:center;color:var(--muted);font-size:13px}
+@media(max-width:700px){.hero{padding:20px 18px;border-radius:16px}.hero h1{font-size:22px}.acts{width:100%}.acts .btn{flex:1;text-align:center}.stat{flex-direction:column;align-items:flex-start;gap:8px}.stat b{font-size:26px}}

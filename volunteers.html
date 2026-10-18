@@ -1,6 +1,17 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Volunteers · KGF Portal</title><link rel="stylesheet" href="shared.css"><link rel="stylesheet" href="volunteers.css"></head>
-<body><div id="nav"></div><main><h1>Volunteers</h1><p class="sub">Register fellows and issue their sign-in credentials.</p>
-<form class="card adm" id="f"><b id="mode" style="grid-column:1/-1" hidden></b><label>Full name<input name="name" required></label><label>Email<input name="email" type="email"></label><label>Phone<input name="phone"></label><label>College or organisation<input name="college"></label><label id="kl" hidden>New access key (blank keeps current)<input name="new_key" autocomplete="off"></label><button id="go">Register fellow</button><button type="button" class="sec" id="cancel" hidden>Cancel</button></form><div id="key" class="card" hidden></div><h2>All volunteers</h2><div id="list"></div>
-</main><script src="shared.js"></script><script src="volunteers.js"></script></body></html>
+<body><div id="nav"></div><main><h1>Volunteers</h1><p class="sub">Register members and volunteers from their KGF registration form.</p>
+<form class="card adm" id="f"><b id="mode" class="wide" hidden></b>
+<label>Full Name* <input name="name" required placeholder="Sudharshan R"></label>
+<label>ID No* (see your KGF ID Card)<input name="code" required pattern="KGF-[0-9]{4}-[0-9]{3}" title="Format: KGF-2026-007" placeholder="KGF-2026-007" autocapitalize="characters"></label>
+<label>Email*<input name="email" type="email" required></label>
+<label>Phone Number*<input name="phone" type="tel" required pattern="\+?[0-9 ]{10,14}" title="10 to 13 digits" inputmode="tel"></label>
+<label>Role*<select name="member_type" required><option value="">Select</option><option>Member</option><option>Volunteer</option></select></label>
+<label>Date of Birth*<input name="dob" type="date" required></label>
+<label>Blood Group*<select name="blood_group" required><option value="">Select</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option></select></label>
+<label>Passport size photo* (Google Drive link, as on ID Card)<input name="photo_url" type="url" required placeholder="https://drive.google.com/file/d/..."></label>
+<label class="wide">House Address*<textarea name="address" rows="2" required></textarea></label>
+<label id="pl">Set 'Access Key' or 'Password' for portal*<input name="pw" type="password" minlength="6" autocomplete="new-password" required></label>
+<button id="go">Register</button><button type="button" class="sec" id="cancel" hidden>Cancel</button></form>
+<h2>All volunteers</h2><div id="list"></div></main><script src="shared.js"></script><script src="volunteers.js"></script></body></html>

@@ -1,2 +1,11 @@
-.bar{height:8px;background:var(--sky);border-radius:4px;min-width:80px;margin-top:4px}.bar i{display:block;height:100%;background:var(--blue2);border-radius:4px}
-.bar.low i{background:var(--red)}.score{font-size:20px;font-weight:800;color:var(--blue)}
+.pbar{height:8px;background:var(--sky);border-radius:4px;min-width:90px;margin-top:4px}.pbar i{display:block;height:100%;background:var(--blue2);border-radius:4px}
+.pbar.low i{background:var(--red)}.pct{font-size:18px;font-weight:800;color:var(--blue)}
+.ctl{display:flex;gap:12px;flex-wrap:wrap;align-items:end;margin-bottom:14px}.ctl label{min-width:210px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}.chips .badge{font-size:13px;padding:5px 12px}
+.ac{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:16px}
+.ac>div{min-height:54px;border-radius:10px;border:1px solid var(--line);background:#fff;padding:4px 6px;font-size:12px}
+.ac .h{min-height:0;background:var(--blue);color:#fff;text-align:center;font-weight:700;border:0}
+.ac .P{background:#dff5e3;border-color:#9ad3a8}.ac .A{background:#fde0e0;border-color:#f0a3a3}.ac .L{background:#fff0c2;border-color:#e8cf7a}
+.ac b{display:block;font-size:11px;margin-top:2px}.ac .e{background:transparent;border:0}
+td select{min-height:34px;padding:4px 6px}
+@media(max-width:600px){.ac>div{min-height:44px;font-size:10px;padding:3px}.ac b{font-size:9px}.ctl label{min-width:100%}}
