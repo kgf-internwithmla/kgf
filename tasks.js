@@ -16,7 +16,8 @@ boot('tasks', async () => {
   const draw = () => {
     $('#list').innerHTML = tbl([['Task', x => `<b>${esc(x.title)}</b><br>${esc(x.location)}`], ['Assigned to', x => esc(x.assigned_to)], ['Due', x => `<span class="${x.status !== 'Completed' && x.due_date < today() ? 'late' : ''}">${fmt(x.due_date)}</span>`], ['Priority', x => badge(x.priority, x.priority === 'High' ? 'bad' : '')],
       [isAdmin() ? 'Report' : 'Add Report', rep],
-      ['Status', x => `<select data-id="${x.id}">${['Pending', 'In Progress', 'Completed'].map(s => `<option${s === x.status ? ' selected' : ''}>${s}</option>`).join('')}</select>${x.completed_at ? `<div class="muted">${fmt(x.completed_at.slice(0, 10))}</div>` : ''}`]], tasks, 'No tasks assigned.');
+      ['Status', x => `<select data-id="${x.id}">${['Pending', 'In Progress', 'Completed'].map(s => `<option${s === x.status ? ' selected' : ''}>${s}</option>`).join('')}</select>${x.completed_at ? `<div class="muted">${fmt(x.completed_at.slice(0, 10))}</div>` : ''}`],
+      ['Actions', x => `<button class="sm sec" data-edit="${x.id}">Edit</button> <button class="sm danger" data-del="${x.id}">Delete</button>`, 'adm']], tasks, 'No tasks assigned.');
   };
   const load = async () => {
     tasks = await sb('tasks', 'select=*&order=due_date.asc' + (isAdmin() ? '' : '&assigned_to=eq.' + encodeURIComponent(u.code)));
@@ -30,7 +31,22 @@ boot('tasks', async () => {
     document.addEventListener('keydown', k); document.body.append(m); m.querySelector('button').focus();
   };
 
-  $('#f').onsubmit = e => { e.preventDefault(); run(async () => { const d = Object.fromEntries(new FormData(e.target)); d.status = 'Pending'; await sb('tasks', '', 'POST', d); e.target.reset(); await load(); }, 'Task assigned'); };
+  const f = $('#f'); let editing = null;
+  const setMode = t => {
+    editing = t; f.reset();
+    $('#mode').hidden = $('#cancel').hidden = !t;
+    $('#mode').textContent = t ? `Editing: ${t.title}` : '';
+    $('#go').textContent = t ? 'Save changes' : 'Assign task';
+    if (!t) return;
+    if (![...f.assigned_to.options].some(o => o.value === t.assigned_to)) f.assigned_to.add(new Option(t.assigned_to, t.assigned_to));
+    for (const k of ['title', 'location', 'assigned_to', 'due_date', 'priority']) f[k].value = t[k] || '';
+  };
+  $('#cancel').onclick = () => setMode(null);
+  f.onsubmit = e => { e.preventDefault(); if (!isAdmin()) return toast('Only admins can change tasks.', true); run(async () => {
+    const d = Object.fromEntries(new FormData(f));
+    if (editing) await sb('tasks', `id=eq.${editing.id}`, 'PATCH', d); else { d.status = 'Pending'; await sb('tasks', '', 'POST', d); }
+    setMode(null); await load();
+  }, editing ? 'Task updated' : 'Task assigned'); };
   $('#list').onchange = e => {
     const s = e.target.closest('select[data-id]'); if (!s) return;
     const t = tasks.find(x => x.id == s.dataset.id), done = s.value === 'Completed';
@@ -40,6 +56,12 @@ boot('tasks', async () => {
   $('#list').onclick = e => {
     const b = e.target.closest('button'); if (!b) return;
     if (b.dataset.pv) return preview(tasks.find(x => x.id == b.dataset.pv));
+    if (b.dataset.edit && isAdmin()) { setMode(tasks.find(x => x.id == b.dataset.edit)); return f.scrollIntoView({ behavior: 'smooth' }); }
+    if (b.dataset.del && isAdmin()) {
+      const t = tasks.find(x => x.id == b.dataset.del);
+      if (t && confirm(`Delete task "${t.title}" assigned to ${t.assigned_to}? Any submitted report link is removed too. This cannot be undone.`)) run(async () => { await sb('tasks', `id=eq.${t.id}`, 'DELETE'); if (editing?.id === t.id) setMode(null); await load(); }, 'Task deleted');
+      return;
+    }
     if (b.dataset.save) {
       const v = $(`input[data-r="${b.dataset.save}"]`).value.trim();
       if (!DRIVE.test(v)) return toast('Paste a Google Drive or Google Docs file link.', true);
