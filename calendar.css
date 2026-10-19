@@ -5,3 +5,5 @@
 .cal .t{background:#fff6d6;outline:2px solid var(--yellow);outline-offset:-2px}.cal .e{display:block;background:var(--blue2);color:#fff;border-radius:3px;padding:0 4px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .cal .e.Meeting{background:var(--red)}.cal .e.Training{background:#a37400}
 @media(max-width:600px){.cal div{min-height:48px;font-size:10px}}
+
+body.admin .cal .e{cursor:pointer}body.admin .cal .e:hover{filter:brightness(1.15)}

@@ -59,9 +59,9 @@ boot('volunteers', async () => {
     if (b.dataset.del) {
       const v = list.find(x => x.id == b.dataset.del);
       if (v.code === me().code || v.role === 'admin') return toast('Admin accounts cannot be deleted.', true);
-      if (!confirm(`Delete ${v.name} (${v.code})? This cannot be undone.`)) return;
+      if (!confirm(`Delete ${v.name} (${v.code})? Their tasks and attendance records will also be deleted. This cannot be undone.`)) return;
       try { await sb('volunteers', `id=eq.${v.id}`, 'DELETE'); if (editing?.id === v.id) setMode(null); await load(); toast('Volunteer deleted'); }
-      catch (x) { toast(/23503|foreign key/i.test(x.message) ? `${v.code} has tasks, attendance or reviews linked. Deactivate instead.` : x.message.slice(0, 160), true); }
+      catch (x) { toast(/23503|foreign key/i.test(x.message) ? `${v.code} still has linked records. Run sql/migrations/migrate-delete-cascade.sql in Supabase, or deactivate instead.` : x.message.slice(0, 160), true); }
     }
   };
   await load();

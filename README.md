@@ -1,4 +1,4 @@
-# KGF Youth Leaders Management Portal
+# KGF Intern with MLA Management Portal
 
 Five pages: Dashboard, Volunteers, Tasks & Assignments, Performance Tracking (attendance), Calendar.
 Plain HTML, CSS and JavaScript on a Supabase database. Shared code is in `shared.js` and `shared.css`; each page has its own `.html`, `.css` and `.js`.

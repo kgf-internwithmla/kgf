@@ -57,7 +57,7 @@ function boot(page, init) {
   const start = () => {
     const u = me(), ini = u.name.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase();
     const links = (cls) => pages.map(p => `<a href="${p[0]}.html" class="${p[0] === page ? 'on' : ''}"${p[0] === page ? ' aria-current="page"' : ''}>${cls ? ic(ICON[p[2]]) : ''}${p[1]}</a>`).join('');
-    const brand = `<a class="brand" href="index.html"><img src="${LOGO}" alt="KGF logo" onerror="this.style.display='none'"><span>KGF <b>Youth Leaders</b></span></a>`;
+    const brand = `<a class="brand" href="index.html"><img src="${LOGO}" alt="KGF logo" onerror="this.style.display='none'"><span>KGF <b>Intern with MLA</b></span></a>`;
     document.body.classList.toggle('admin', isAdmin());
     $('#nav').innerHTML = `<header class="top"><div class="tbi"><button class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="drawer">${ic(ICON.menu)}</button>${brand}<nav class="dnav" aria-label="Main">${links(0)}</nav><div class="user"><span class="av">${esc(ini)}</span><span class="un">${esc(u.name)}<small>${esc(u.code)} · ${isAdmin() ? 'Admin' : 'Fellow'}</small></span><button class="sm sec out">Sign out</button></div></div></header>
 <div class="scrim" id="scrim"></div>
@@ -70,7 +70,7 @@ function boot(page, init) {
   };
   if (me()) return start();
   const l = document.createElement('div'); l.id = 'login';
-  l.innerHTML = `<div class="lp"><img src="${LOGO}" alt="KGF logo" onerror="this.style.display='none'"><h2>Kavundampalayam<br>Governance Fellowship</h2><p>Youth Leaders Management Portal</p><ul><li>Fieldwork tasks and report submission</li><li>Attendance records</li></ul></div>
+  l.innerHTML = `<div class="lp"><img src="${LOGO}" alt="KGF logo" onerror="this.style.display='none'"><h2>Kavundampalayam<br>Governance Fellowship</h2><p>Intern with MLA Management Portal</p><ul><li>Fieldwork tasks and report submission</li><li>Attendance records</li></ul></div>
 <form class="lf"><h1>Sign in</h1><p>Use the ID No and password issued by the programme office.</p><label>ID No<input name="c" required autocomplete="username" autocapitalize="characters" placeholder="KGF-2026-001"></label><label>Password<div class="pw"><input name="k" type="password" required autocomplete="current-password" placeholder="Enter password"><button type="button" class="eye" aria-label="Show password">${ic(ICON.eye)}</button></div></label><div class="err" id="err" role="alert"></div><button class="go">Sign in</button></form>`;
   document.body.append(l);
   const eye = l.querySelector('.eye'), k = l.querySelector('[name=k]');
