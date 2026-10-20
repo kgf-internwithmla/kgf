@@ -1,11 +1,12 @@
 boot('tasks', async () => {
-  const u = me(); let tasks = [];
+  const u = me(); let tasks = [], fellows = [];
   const DRIVE = /^https:\/\/(drive|docs)\.google\.com\//i;
   const prev = l => {
     if (/docs\.google\.com\/(document|spreadsheets|presentation)\/d\//.test(l)) return l.replace(/\/(edit|view|pub)[^]*$/, '/preview');
     const m = /\/d\/([\w-]+)|[?&]id=([\w-]+)/.exec(l); return m ? `https://drive.google.com/file/d/${m[1] || m[2]}/preview` : '';
   };
-  if (isAdmin()) { const v = await sb('volunteers', 'select=code,name&role=eq.fellow&status=eq.active&order=code.asc'); $('#who').innerHTML = v.map(x => `<option value="${esc(x.code)}">${esc(x.code)} · ${esc(x.name)}</option>`).join(''); }
+  const ALL = '__ALL__';
+  if (isAdmin()) { fellows = await sb('volunteers', 'select=code,name&role=eq.fellow&status=eq.active&order=code.asc'); $('#who').innerHTML = '<option value="">Select volunteer</option><option value="' + ALL + '">Everyone (all active volunteers)</option>' + fellows.map(x => `<option value="${esc(x.code)}">${esc(x.code)} · ${esc(x.name)}</option>`).join(''); }
 
   const rep = x => {
     const done = x.status === 'Completed' && x.report_url;
@@ -14,13 +15,13 @@ boot('tasks', async () => {
     return `<div class="rep"><input type="url" data-r="${x.id}" value="${esc(x.report_url || '')}" placeholder="Google Drive file link" aria-label="Report link"${done ? ' readonly' : ''}><div class="ra">${done ? '' : `<button class="sm sec" data-save="${x.id}">Save link</button>`}${pv}</div></div>`;
   };
   const draw = () => {
-    $('#list').innerHTML = tbl([['Task', x => `<b>${esc(x.title)}</b><br>${esc(x.location)}`], ['Assigned to', x => esc(x.assigned_to)], ['Due', x => `<span class="${x.status !== 'Completed' && x.due_date < today() ? 'late' : ''}">${fmt(x.due_date)}</span>`], ['Priority', x => badge(x.priority, x.priority === 'High' ? 'bad' : '')],
+    $('#list').innerHTML = tbl([['Task', x => `<b>${esc(x.title)}</b>${x.batch_id ? ' ' + badge('Common task') : ''}<br>${esc(x.location)}`], ['Assigned to', x => esc(x.assigned_to)], ['Due', x => `<span class="${x.status !== 'Completed' && x.due_date < today() ? 'late' : ''}">${fmt(x.due_date)}</span>`], ['Priority', x => badge(x.priority, x.priority === 'High' ? 'bad' : '')],
       [isAdmin() ? 'Report' : 'Add Report', rep],
       ['Status', x => `<select data-id="${x.id}">${['Pending', 'In Progress', 'Completed'].map(s => `<option${s === x.status ? ' selected' : ''}>${s}</option>`).join('')}</select>${x.completed_at ? `<div class="muted">${fmt(x.completed_at.slice(0, 10))}</div>` : ''}`],
       ['Actions', x => `<button class="sm sec" data-edit="${x.id}">Edit</button> <button class="sm danger" data-del="${x.id}">Delete</button>`, 'adm']], tasks, 'No tasks assigned.');
   };
   const load = async () => {
-    tasks = await sb('tasks', 'select=*&order=due_date.asc' + (isAdmin() ? '' : '&assigned_to=eq.' + encodeURIComponent(u.code)));
+    tasks = await sb('tasks', 'select=*&order=due_date.asc,batch_id.asc,assigned_to.asc' + (isAdmin() ? '' : '&assigned_to=eq.' + encodeURIComponent(u.code)));
     draw();
   };
   const preview = t => {
@@ -33,20 +34,36 @@ boot('tasks', async () => {
 
   const f = $('#f'); let editing = null;
   const setMode = t => {
-    editing = t; f.reset();
+    editing = t; f.reset(); f.assigned_to.querySelector(`option[value="${ALL}"]`).disabled = !!t;
     $('#mode').hidden = $('#cancel').hidden = !t;
     $('#mode').textContent = t ? `Editing: ${t.title}` : '';
-    $('#go').textContent = t ? 'Save changes' : 'Assign task';
+    $('#go').textContent = t ? 'Save changes' : 'Assign task'; $('#all').hidden = !!t;
     if (!t) return;
     if (![...f.assigned_to.options].some(o => o.value === t.assigned_to)) f.assigned_to.add(new Option(t.assigned_to, t.assigned_to));
     for (const k of ['title', 'location', 'assigned_to', 'due_date', 'priority']) f[k].value = t[k] || '';
   };
   $('#cancel').onclick = () => setMode(null);
+  // One task per active volunteer; every copy is an independent row (own status and report), linked only by batch_id
+  const assignAll = async d => {
+    if (!fellows.length) throw new Error('There are no active volunteers to assign.');
+    if (!confirm(`Assign "${d.title}" to all ${fellows.length} active volunteers? Each one gets their own separate copy.`)) return false;
+    const batch = 'B' + Date.now().toString(36);
+    await sb('tasks', '', 'POST', fellows.map(x => ({ ...d, assigned_to: x.code, status: 'Pending', batch_id: batch })));
+    toast(`Task assigned to ${fellows.length} volunteers`); return true;
+  };
+  $('#all').onclick = () => {
+    if (!isAdmin() || !f.reportValidity()) return;
+    const d = Object.fromEntries(new FormData(f)); delete d.assigned_to;
+    run(async () => { if (await assignAll(d)) { setMode(null); await load(); } });
+  };
   f.onsubmit = e => { e.preventDefault(); if (!isAdmin()) return toast('Only admins can change tasks.', true); run(async () => {
     const d = Object.fromEntries(new FormData(f));
-    if (editing) await sb('tasks', `id=eq.${editing.id}`, 'PATCH', d); else { d.status = 'Pending'; await sb('tasks', '', 'POST', d); }
+    if (!d.assigned_to) throw new Error('Choose a volunteer, or use Assign to Everyone.');
+    if (editing) { await sb('tasks', `id=eq.${editing.id}`, 'PATCH', d); toast('Task updated'); }
+    else if (d.assigned_to === ALL) { if (!(await assignAll(d))) return;
+    } else { d.status = 'Pending'; await sb('tasks', '', 'POST', d); toast('Task assigned'); }
     setMode(null); await load();
-  }, editing ? 'Task updated' : 'Task assigned'); };
+  }); };
   $('#list').onchange = e => {
     const s = e.target.closest('select[data-id]'); if (!s) return;
     const t = tasks.find(x => x.id == s.dataset.id), done = s.value === 'Completed';

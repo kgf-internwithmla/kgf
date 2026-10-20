@@ -1,7 +1,9 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Volunteers · KGF Portal</title><link rel="stylesheet" href="shared.css"><link rel="stylesheet" href="volunteers.css"></head>
-<body><div id="nav"></div><main><h1>Volunteers</h1><p class="sub">Register members and volunteers from their KGF registration form.</p>
+<body><div id="nav"></div><main><h1>Volunteers</h1><p class="sub">Programme admin and registered volunteers.</p>
+<h2>Admin</h2><div id="admins"></div>
+<h2 class="adm">Register a volunteer</h2>
 <form class="card adm" id="f"><b id="mode" class="wide" hidden></b>
 <label>Full Name* <input name="name" required placeholder="Sudharshan R"></label>
 <label>ID No* (see your KGF ID Card)<input name="code" required pattern="KGF-[0-9]{4}-[0-9]{3}" title="Format: KGF-2026-007" placeholder="KGF-2026-007" autocapitalize="characters"></label>
@@ -14,4 +16,4 @@
 <label class="wide">House Address*<textarea name="address" rows="2" required></textarea></label>
 <label id="pl">Set 'Access Key' or 'Password' for portal*<input name="pw" type="password" minlength="6" autocomplete="new-password" required></label>
 <button id="go">Register</button><button type="button" class="sec" id="cancel" hidden>Cancel</button></form>
-<h2>All volunteers</h2><div id="list"></div></main><script src="shared.js"></script><script src="volunteers.js"></script></body></html>
+<h2>Volunteers <span class="badge" id="vc"></span></h2><div id="list"></div></main><script src="shared.js"></script><script src="volunteers.js"></script></body></html>

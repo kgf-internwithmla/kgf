@@ -13,19 +13,19 @@ boot('volunteers', async () => {
   };
   const load = async () => {
     list = await sb('volunteers', 'select=*&order=code.asc');
-    const act = x => `<button class="sm sec" data-edit="${x.id}">Edit</button> ` + (x.role === 'admin' ? '' :
-      `<button class="sm sec" data-id="${x.id}" data-s="${x.status}">${x.status === 'active' ? 'Deactivate' : 'Activate'}</button> <button class="sm danger" data-del="${x.id}">Delete</button>`);
-    $('#list').innerHTML = tbl([
-      ['Volunteer', x => `<div class="who2">${ph(x)}<div><b>${esc(x.name)}</b><small>${esc(x.code)}</small></div></div>`],
-      ['Role', x => badge(x.member_type)],
-      ['Contact', x => esc(x.email) + '<br>' + esc(x.phone)],
-      ['DOB / Blood', x => fmt(x.dob) + '<br>' + esc(x.blood_group)],
-      ['Address', x => `<div class="addr">${esc(x.address)}</div>`],
+    const admins = list.filter(x => x.role === 'admin'), fellows = list.filter(x => x.role !== 'admin');
+    const who = x => `<div class="who2">${ph(x)}<div><b>${esc(x.name)}</b><small>${esc(x.code)}</small></div></div>`;
+    const contact = x => esc(x.email) + '<br>' + esc(x.phone), dob = x => fmt(x.dob) + '<br>' + esc(x.blood_group), addr = x => `<div class="addr">${esc(x.address)}</div>`;
+    const edit = x => `<button class="sm sec" data-edit="${x.id}">Edit</button>`;
+    $('#admins').innerHTML = tbl([['Admin', who], ['Contact', contact], ['DOB / Blood', dob], ['Address', addr], ['Actions', edit, 'adm']], admins, 'No admin found.');
+    $('#vc').textContent = fellows.length;
+    $('#list').innerHTML = tbl([['Volunteer', who], ['Role', x => badge(x.member_type)], ['Contact', contact], ['DOB / Blood', dob], ['Address', addr],
       ['Status', x => badge(x.status, x.status === 'active' ? 'ok' : 'bad')],
-      ['Actions', act, 'adm']], list);
+      ['Actions', x => edit(x) + ` <button class="sm sec" data-id="${x.id}" data-s="${x.status}">${x.status === 'active' ? 'Deactivate' : 'Activate'}</button> <button class="sm danger" data-del="${x.id}">Delete</button>`, 'adm']], fellows, 'No volunteers registered yet.');
   };
   const setMode = v => {
     editing = v; f.reset(); f.code.readOnly = !!v; f.pw.required = !v;
+    const ad = v?.role === 'admin'; f.member_type.closest('label').hidden = ad; f.member_type.required = !ad;
     $('#mode').hidden = $('#cancel').hidden = !v;
     $('#mode').textContent = v ? `Editing ${v.code}. Leave the password blank to keep it.` : '';
     $('#go').textContent = v ? 'Save changes' : 'Register';
@@ -40,6 +40,7 @@ boot('volunteers', async () => {
       const d = Object.fromEntries(new FormData(f)), pw = (d.pw || '').trim(); delete d.pw;
       d.code = d.code.trim().toUpperCase(); d.phone = d.phone.replace(/\s/g, '');
       if (pw) d.key_hash = await sha(pw);
+      if (editing?.role === 'admin') delete d.member_type;
       if (editing) {
         delete d.code; await sb('volunteers', `id=eq.${editing.id}`, 'PATCH', d);
         if (editing.code === me().code) sessionStorage.setItem('kgf', JSON.stringify({ ...me(), name: d.name }));
@@ -48,7 +49,7 @@ boot('volunteers', async () => {
     } catch (x) { toast(/23505|duplicate/i.test(x.message) ? 'That ID No is already registered.' : x.message.slice(0, 160), true); }
   };
 
-  $('#list').onclick = async e => {
+  const onAct = async e => {
     const p = e.target.closest('[data-photo]'); if (p) return lightbox(p.dataset.photo, p.dataset.n);
     if (!isAdmin()) return;
     const b = e.target.closest('button'); if (!b) return;
@@ -64,5 +65,6 @@ boot('volunteers', async () => {
       catch (x) { toast(/23503|foreign key/i.test(x.message) ? `${v.code} still has linked records. Run sql/migrations/migrate-delete-cascade.sql in Supabase, or deactivate instead.` : x.message.slice(0, 160), true); }
     }
   };
+  $('#admins').onclick = $('#list').onclick = onAct;
   await load();
 });
