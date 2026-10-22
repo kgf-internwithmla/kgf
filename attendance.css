@@ -9,3 +9,18 @@
 .ac b{display:block;font-size:11px;margin-top:2px}.ac .e{background:transparent;border:0}
 td select{min-height:34px;padding:4px 6px}
 @media(max-width:600px){.ac>div{min-height:44px;font-size:10px;padding:3px}.ac b{font-size:9px}.ctl label{min-width:100%}}
+
+.muted{color:var(--muted);font-size:13px}
+.wide{grid-column:1/-1}
+.pkh{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px}
+.pickgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:8px}
+.pk{flex-direction:row;align-items:center;gap:10px;padding:9px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;cursor:pointer;font-weight:400}
+.pk:hover{background:#f7f9ff}.pk:has(input:checked){background:var(--sky);border-color:var(--blue2)}
+.pk input{width:20px;height:20px;min-height:0;padding:0;flex:none;accent-color:var(--blue2)}
+.pk span{flex:1;min-width:0}.pk small{display:block;color:var(--muted);font-weight:400}
+.pickgrid .badge{flex:none}
+.mkb{display:flex;gap:10px;flex-wrap:wrap;align-items:center;font-weight:600}
+.mk.P{background:#14602b}.mk.P:hover{background:#0f4a21}
+.mk.A{background:var(--red)}.mk.A:hover{background:#a91d1d}
+.mk.L{background:#a06b00}.mk.L:hover{background:#7a5200}
+@media(max-width:600px){.mkb span{width:100%}.mk{flex:1}}

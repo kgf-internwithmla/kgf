@@ -1,6 +1,6 @@
-# KGF Youth Leaders Management Portal
+# KGF Intern with MLA Management Portal
 
-Five pages: Dashboard, Volunteers, Tasks & Assignments, Attendance Tracking (attendance), Calendar.
+Six pages: Dashboard, Volunteers, Tasks & Assignments, Attendance Tracking, Calendar, Resources.
 Plain HTML, CSS and JavaScript on a Supabase database. Shared code is in `shared.js` and `shared.css`; each page has its own `.html`, `.css` and `.js`.
 
 ## Setup (new project)
@@ -12,7 +12,7 @@ Plain HTML, CSS and JavaScript on a Supabase database. Shared code is in `shared
 
 ## Upgrading an existing database
 Run only the files you have not run yet, in this order, from `sql/migrations/`:
-`migrate-ids.sql`, `migrate-volunteers.sql`, `migrate-tasks.sql`, `migrate-attendance.sql`, `migrate-remove-requests.sql`, `migrate-delete-cascade.sql`, `migrate-remove-validation.sql`, `migrate-common-tasks.sql`.
+`migrate-ids.sql`, `migrate-volunteers.sql`, `migrate-tasks.sql`, `migrate-attendance.sql`, `migrate-remove-requests.sql`, `migrate-delete-cascade.sql`, `migrate-remove-validation.sql`, `migrate-common-tasks.sql`, `migrate-resources.sql`.
 `migrate-attendance.sql` and `migrate-remove-requests.sql` delete data permanently.
 
 ## Demo sign-ins (from demo-data.sql)

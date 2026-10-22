@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Resources · KGF Portal</title><link rel="stylesheet" href="shared.css"><link rel="stylesheet" href="resources.css"></head>
+<body><div id="nav"></div><main><h1>Resources</h1><p class="sub">Learning resources and study materials for volunteers.</p>
+<h2 class="adm">Add a resource</h2>
+<form class="card adm" id="f"><b id="mode" class="wide" hidden></b>
+<label>Resource name*<input name="title" required maxlength="150" placeholder="Ward administration handbook"></label>
+<label>Google Drive file link*<input name="file_url" type="url" required placeholder="https://drive.google.com/file/d/..."></label>
+<label class="wide">Description<textarea name="description" rows="2" maxlength="600" placeholder="What this resource covers and who should read it"></textarea></label>
+<button id="go">Add resource</button><button type="button" class="sec" id="cancel" hidden>Cancel</button></form>
+<h2>All resources <span class="badge" id="rc"></span></h2><div id="list"></div>
+</main><script src="shared.js"></script><script src="resources.js"></script></body></html>

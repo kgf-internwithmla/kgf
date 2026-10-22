@@ -21,6 +21,7 @@ const ICON = {
   eyeOff: '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 19c-6.5 0-10-7-10-7a18.5 18.5 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c6.5 0 10 7 10 7a18.5 18.5 0 0 1-2.16 3.19M1 1l22 22"/><path d="M14.12 14.12a3 3 0 1 1-4.24-4.24"/>',
   menu: '<path d="M3 6h18M3 12h18M3 18h18"/>',
   close: '<path d="M18 6 6 18M6 6l12 12"/>',
+  book: '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>',
   out: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>'
 };
 if (!document.querySelector('link[rel~=icon]')) document.head.insertAdjacentHTML('beforeend', `<link rel="icon" href="${LOGO}"><meta name="theme-color" content="#0b2a6f">`);
@@ -53,11 +54,11 @@ const badge = (t, cls = '') => `<span class="badge ${cls}">${esc(t)}</span>`;
 const fmt = d => d ? new Date(d + 'T00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : '–';
 
 function boot(page, init) {
-  const pages = [['index', 'Dashboard', 'home'], ['volunteers', 'Volunteers', 'users'], ['tasks', 'Tasks', 'tasks'], ['attendance', 'Attendance', 'chart'], ['calendar', 'Calendar', 'cal']];
+  const pages = [['index', 'Dashboard', 'home'], ['volunteers', 'Volunteers', 'users'], ['tasks', 'Tasks', 'tasks'], ['attendance', 'Attendance', 'chart'], ['calendar', 'Calendar', 'cal'], ['resources', 'Resources', 'book']];
   const start = () => {
     const u = me(), ini = u.name.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase();
     const links = (cls) => pages.map(p => `<a href="${p[0]}.html" class="${p[0] === page ? 'on' : ''}"${p[0] === page ? ' aria-current="page"' : ''}>${cls ? ic(ICON[p[2]]) : ''}${p[1]}</a>`).join('');
-    const brand = `<a class="brand" href="index.html"><img src="${LOGO}" alt="KGF logo" onerror="this.style.display='none'"><span>KGF <b>Youth Leaders</b></span></a>`;
+    const brand = `<a class="brand" href="index.html"><img src="${LOGO}" alt="KGF logo" onerror="this.style.display='none'"><span>KGF <b>Intern with MLA</b></span></a>`;
     document.body.classList.toggle('admin', isAdmin());
     $('#nav').innerHTML = `<header class="top"><div class="tbi"><button class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="drawer">${ic(ICON.menu)}</button>${brand}<nav class="dnav" aria-label="Main">${links(0)}</nav><div class="user"><span class="av">${esc(ini)}</span><span class="un">${esc(u.name)}<small>${esc(u.code)} · ${isAdmin() ? 'Admin' : 'Fellow'}</small></span><button class="sm sec out">Sign out</button></div></div></header>
 <div class="scrim" id="scrim"></div>
@@ -70,7 +71,7 @@ function boot(page, init) {
   };
   if (me()) return start();
   const l = document.createElement('div'); l.id = 'login';
-  l.innerHTML = `<div class="lp"><img src="${LOGO}" alt="KGF logo" onerror="this.style.display='none'"><h2>Kavundampalayam<br>Governance Fellowship</h2><p>Youth Leaders Management Portal</p><ul><li>Fieldwork tasks and report submission</li><li>Attendance records</li></ul></div>
+  l.innerHTML = `<div class="lp"><img src="${LOGO}" alt="KGF logo" onerror="this.style.display='none'"><h2>Kavundampalayam<br>Governance Fellowship</h2><p>Intern with MLA Management Portal</p><ul><li>Fieldwork tasks and report submission</li><li>Attendance records</li></ul></div>
 <form class="lf"><h1>Sign in</h1><p>Use the ID No and password issued by the programme office.</p><label>ID No<input name="c" required autocomplete="username" autocapitalize="characters" placeholder="KGF-2026-001"></label><label>Password<div class="pw"><input name="k" type="password" required autocomplete="current-password" placeholder="Enter password"><button type="button" class="eye" aria-label="Show password">${ic(ICON.eye)}</button></div></label><div class="err" id="err" role="alert"></div><button class="go">Sign in</button></form>`;
   document.body.append(l);
   const eye = l.querySelector('.eye'), k = l.querySelector('[name=k]');
