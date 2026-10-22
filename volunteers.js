@@ -17,7 +17,7 @@ boot('volunteers', async () => {
     const who = x => `<div class="who2">${ph(x)}<div><b>${esc(x.name)}</b><small>${esc(x.code)}</small></div></div>`;
     const contact = x => esc(x.email) + '<br>' + esc(x.phone), dob = x => fmt(x.dob) + '<br>' + esc(x.blood_group), addr = x => `<div class="addr">${esc(x.address)}</div>`;
     const edit = x => `<button class="sm sec" data-edit="${x.id}">Edit</button>`;
-    $('#admins').innerHTML = tbl([['Admin', who], ['Contact', contact], ['DOB / Blood', dob], ['Address', addr], ['Actions', edit, 'adm']], admins, 'No admin found.');
+    $('#admins').innerHTML = tbl([['Admin', who], ['Contact', contact], ['Actions', edit, 'adm']], admins, 'No admin found.');
     $('#vc').textContent = fellows.length;
     $('#list').innerHTML = tbl([['Volunteer', who], ['Role', x => badge(x.member_type)], ['Contact', contact], ['DOB / Blood', dob], ['Address', addr],
       ['Status', x => badge(x.status, x.status === 'active' ? 'ok' : 'bad')],

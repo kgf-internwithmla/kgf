@@ -1,0 +1,10 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Attendance Tracking · KGF Portal</title><link rel="stylesheet" href="shared.css"><link rel="stylesheet" href="attendance.css"></head>
+<body><div id="nav"></div><main><h1>Attendance Tracking</h1><p class="sub">Attendance records of the fellows.</p>
+<form class="card adm" id="fa"><label>Fellow<select name="volunteer_code" id="fs" required></select></label><label>Date<input name="att_date" type="date" required></label><label>Attendance<select name="status"><option>Present</option><option>Absent</option><option>Leave</option></select></label><button>Save attendance</button></form>
+<h2>Attendance overview</h2><div id="list"></div>
+<h2>Date-wise attendance record</h2>
+<div class="ctl"><label class="adm">Fellow<select id="vf"></select></label><label>Month<input type="month" id="vm"></label><button class="sec sm" id="all" type="button">Show all dates</button></div>
+<div id="sum" class="chips"></div><div id="cal"></div><div id="days"></div>
+</main><script src="shared.js"></script><script src="attendance.js"></script></body></html>
