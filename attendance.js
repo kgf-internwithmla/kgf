@@ -28,7 +28,16 @@ boot('attendance', async () => {
       ['Attendance', x => `<span class="pct">${x.pct}%</span> of ${x.t} days<div class="pbar ${x.pct < 75 ? 'low' : ''}"><i style="width:${x.pct}%"></i></div>`],
       ['', x => `<button class="sm sec" data-view="${esc(x.code)}">View dates</button>`]], rows, 'No fellows yet.');
   };
+  // Present / Absent / Leave lists for one chosen date
+  const dayView = () => {
+    const d = $('#vd').value; if (!d) { $('#dayv').innerHTML = ''; return; }
+    const r = att.filter(x => x.att_date === d).sort((a, b) => a.volunteer_code.localeCompare(b.volunteer_code));
+    $('#dayv').innerHTML = `<p class="dtl"><b>${fmt(d)}</b> · ${new Date(d + 'T00:00').toLocaleDateString('en-IN', { weekday: 'long' })} · ${r.length} marked</p><div class="dg">` +
+      [[P, 'ok'], [A, 'bad'], [L, 'warn']].map(([s, c]) => { const l = r.filter(x => x.status === s);
+        return `<div class="card dc ${c}"><div class="dch">${badge(s, c)}<b>${l.length}</b></div>${l.length ? `<ul>${l.map(x => `<li><b>${esc(nm(x.volunteer_code))}</b><small>${esc(x.volunteer_code)}</small></li>`).join('')}</ul>` : '<div class="muted">No one</div>'}</div>`; }).join('') + '</div>';
+  };
   const detail = () => {
+    dayView();
     const c = who(), m = month();
     const r = att.filter(x => x.volunteer_code === c && (!m || x.att_date.startsWith(m))).sort((a, b) => a.att_date.localeCompare(b.att_date));
     const n = s => r.filter(x => x.status === s).length, pct = r.length ? Math.round(100 * n(P) / r.length) : 0;
@@ -61,7 +70,7 @@ boot('attendance', async () => {
       toast(`${status} marked for ${codes.length} fellow${codes.length > 1 ? 's' : ''}`);
     });
   };
-  $('#vf').onchange = $('#vm').onchange = detail;
+  $('#vf').onchange = $('#vm').onchange = detail; $('#vd').onchange = dayView;
   $('#all').onclick = () => { $('#vm').value = ''; detail(); };
   $('#list').onclick = e => { const b = e.target.closest('[data-view]'); if (!b) return; if (isAdmin()) $('#vf').value = b.dataset.view; if (!month()) $('#vm').value = today().slice(0, 7); detail(); $('#sum').scrollIntoView({ behavior: 'smooth' }); };
   $('#days').onchange = e => { const s = e.target.closest('select[data-id]'); if (s && isAdmin()) run(async () => { await sb('attendance', `id=eq.${s.dataset.id}`, 'PATCH', { status: s.value }); await load(); }, 'Attendance updated'); };
